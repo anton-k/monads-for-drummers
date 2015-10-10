@@ -1,11 +1,11 @@
 Monads for Drummers
 ===============================
 
+![drummer](pic/drummers-animal.jpg)
+
 I'd like to explain the Haskell's Monad class. 
 There are so many monad tutorials. Do we need yet another one?
 But no one tried to explain it so that even a drummer can understand it!
-
-![drummer](pic/drummers-animal.jpg)
 
 It's just a joke, there is another reason.
 
