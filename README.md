@@ -1,11 +1,11 @@
 Monads for Drummers
 ===============================
 
-![drummer](pic/drummers-animal.jpg)
-
 I'd like to explain the Haskell's Monad class. 
 There are so many monad tutorials. Do we need yet another one?
 But no one tried to explain it so that even a drummer can understand it!
+
+![drummer](pic/drummers-animal.jpg)
 
 It's just a joke, there is another reason.
 
@@ -210,7 +210,7 @@ we can sequence the order of execution:
 ~~~
 
 The `input` returns some value and stores it to variable `x`.
-we need to use this value somehow. But how can we do it?
+We need to use this value somehow. But how can we do it?
 What if our statements are functions and we can pass the user 
 string as input for the next function:
 
@@ -330,11 +330,21 @@ headSafe xs = case xs of
     []    -> Nothing
 ~~~
 
+Also we can define a function that extracts a tail from the list safely:
+
+~~~haskell
+tailSafe :: [a] -> Maybe [a]
+tailSafe xs = case xs of
+    (_:as) -> Just as
+    []     -> Nothing
+~~~
+
+
 What if we want to define the function that safely extracts
 the second element from the list? It would be nice to define it like this:
 
 ~~~haskell
-secondSafe = headSafe . headSafe
+secondSafe = headSafe . tailSafe
 ~~~
 
 So the second element is just the `headSafe` that is applied twice.
@@ -343,21 +353,21 @@ Alas we can not do it. The input and output types don't match.
 But if there is an instance of Monad or Kleisli for Maybe, we can define it like this:
 
 ~~~haskell
-secondSafe = headSafe *> headSafe
+secondSafe = tailSafe *> headSafe
 ~~~
 
 The third element is not that difficult to define:
 
 ~~~haskell
-thirdSafe = secondSafe *> headSafe
+thirdSafe = tailSafe *> tailSafe *> headSafe
 ~~~
 
 To appreciate the usefulness of this approach I'm going to define 
 the `secondSafe` in the long way:
 
 ~~~haskell
-safeHead :: [a] -> Maybe a
-safeHead xs = case xs of
+secondSafe :: [a] -> Maybe a
+secondSafe xs = case xs of
     (_:x:_) -> Just x
     _       -> Nothing
 ~~~
@@ -455,8 +465,8 @@ We can try it with `next`:
 Functions with state
 ------------------------------
 
-Another useful function is a function with the state.
-It calculates result based on some state value.
+Another useful function is a function with a state.
+It calculates its result based on some state value.
 
 ![State](pic/state0.png)
 
@@ -551,7 +561,7 @@ and then later to
 ~~~
 
 It turns out that the monoid sequencing `<>` is 
-like bind or (sequencing for `Kelisli`). So with
+like bind or sequencing for `Kleisli`. So with
 real Haskell we get:
 
 ~~~haskell
@@ -578,7 +588,7 @@ With Haskell it becomes:
 
 We can see that with Monads the two examples are different!
 That is the magic of sequencing with Monads. 
-But you can say oohm my God! Do I need to write
+But you can say ooh my God! Do I need to write
 those simple Python programs with monstrous expressions
 like this:
 
@@ -591,7 +601,7 @@ like this:
 ~~~
 
 In fact you don't need to do it. The clever Haskell language designers
-created a special syntax sugar to make Haskell look like an imperative language.
+created a special syntactic sugar to make Haskell look like an imperative language.
 It's called `do`-notation. With it we can write our example like this:
 
 Ask twice:
@@ -632,7 +642,7 @@ is a bind operator.
 
 So we have a nice and clean way to do imperative programming with Haskell!
 The imperative languages like Java or Python also have monads.
-it's better to say that they have **THE MONAD**. It's built in
+It's better to say that they have **THE MONAD**. It's built in
 and it's hidden from the user. It's so much in the bones
 of the language that we tend not to care about it. It just works!
 But the Haskell is different! With Haskell we can see that there are
@@ -649,7 +659,7 @@ with the same interface. The interface of sequencing!
 
 #### Reader
 
-There are another monads.
+There are other monads.
 The reader monad is for functions that can access
 some "global" state or environment. They can only read the value
 of the state.
@@ -669,7 +679,7 @@ Can you define `Kleisli` or `Monad` instance for it
 
 #### Writer
 
-The writer monad is another special case of state Monad.
+The writer monad is another special case of a state Monad.
 The writer can process the values and accumulate some state.
 The accumulation of the state is expressed with Monoid methods:
 
@@ -692,7 +702,7 @@ Can you complete the `Monad`  class by looking at the picture of it:
 #### Functor
 
 Sometimes the monadic bind `>>=` is overkill. 
-Instead of applying monadic function to a monadic value:
+Instead of applying a monadic function to a monadic value:
 
 ~~~haskell
 m a -> (a -> m b) -> m b
@@ -753,8 +763,8 @@ class Functor m => Applicative m where
 (<$>) = fmap
 ~~~
 
-It's alittle bit windy but the concept is simple.
-We want to apply a pure function to a several "structured" with `m` values.
+It's a little bit windy but the concept is simple.
+We want to apply a pure function to several `m`-structured values.
 The `pure` is the same as `return`.
 
 We can redefine the two examples with Applicative and Functor:
@@ -771,7 +781,7 @@ Ask once:
 fmap (\x -> x ++ x) getLine
 ~~~
 
-Yuo can try it right in the ghci!
+You can try it right in ghci!
 
-I hope you get the idea and you won't get lost in the forest Applicatives, Functors and Monads.
+I hope you get the idea and you won't get lost in the forest of Applicatives, Functors and Monads.
 Happy Haskelling!
