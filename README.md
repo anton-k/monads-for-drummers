@@ -84,7 +84,7 @@ getBoth () = res
 Unfortunately (or maybe for a good reason) it's not going to work. 
 we are about to see what makes Haskell so different from Python or 
 from many other languages. In Python we have explicit order of execution.
-Do this line than do the next one if you are done make the third one and so one.
+Do this line then do the next one if you are done make the third one and so on.
 So when the Python executes `getBoth` it executes it line by line:
 
 ~~~python
