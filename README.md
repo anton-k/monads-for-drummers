@@ -75,7 +75,7 @@ getBoth () = res
 Let's try to translate the second example. We want the user to type only once:
 
 ~~~haskell
-getBoth () = res
+getOne () = res
     where
         x = input ()        
         res = x ++ x
