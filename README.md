@@ -242,7 +242,7 @@ Let's look at the class Monad:
 ~~~haskell
 class Monad m where
     return :: a -> m a
-    (>>=)  :: m a -> (a -> m b)
+    (>>=)  :: m a -> (a -> m b) -> m b
 ~~~
 
 Don't try to understand it! I think a lot of confusion
